@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSStapleMenu", "KSStapleMenu.csproj", "{EE8A1AEF-B54F-4834-9464-785E32D2327F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Release|iPhone = Release|iPhone
+		Ad-Hoc|iPhone = Ad-Hoc|iPhone
+		AppStore|iPhone = AppStore|iPhone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Debug|iPhone.Build.0 = Debug|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Release|iPhone.ActiveCfg = Release|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Release|iPhone.Build.0 = Release|iPhone
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{EE8A1AEF-B54F-4834-9464-785E32D2327F}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = KSStapleMenu.csproj
+	EndGlobalSection
+EndGlobal
