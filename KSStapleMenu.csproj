@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

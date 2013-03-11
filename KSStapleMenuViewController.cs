@@ -30,7 +30,23 @@ namespace KSStapleMenu
 		{
 			base.ViewDidLoad ();
 			
+
+		}
+
+		public override void ViewWillAppear (bool animated)
+		{
+			base.ViewWillAppear (animated);
+
 			// Perform any additional setup after loading the view, typically from a nib.
+			UILabel lab = new UILabel ()
+			{
+				Text = "Hallo World!",
+				Font = UIFont.SystemFontOfSize(40f),
+				AutoresizingMask = UIViewAutoresizing.All
+			};
+			lab.SizeToFit ();
+			this.View.AddSubview (lab);
+			lab.Center = this.View.Center;
 		}
 		
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
