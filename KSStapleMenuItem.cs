@@ -3,11 +3,15 @@ using System.Linq;
 using System.Collections.Generic;
 using MonoTouch.UIKit;
 using System.Drawing;
+using MonoTouch.Foundation;
 
 namespace KSStapleMenu
 {
 	public class KSStapleMenuItem
 	{
+		public const string SelectedIndexChangedNotif = "SelectedIndexChanged";
+		public const string ElementAddedNotif = "ElementAdded";
+
 		public KSStapleMenuItem (string id, UIImage image, string title = null)
 		{
 			this.Id = id;
@@ -21,19 +25,22 @@ namespace KSStapleMenu
 			private set;
 		}
 
-		public UIView View
+		public UIView GetViewForIndex(int index)
+		{
+			if(this.elements.Count <= 0 || this.elements.Count < index)
+			{
+				return null;
+			}
+			return this.elements[index];
+		}
+
+		public int NumberOfElements
 		{
 			get
 			{
-				if(this.elements.Count <= 0)
-				{
-					return null;
-				}
-				return this.elements[this.SelectedIndex];
+				return this.elements == null ? 0 : this.elements.Count;
 			}
 		}
-
-		private List<UIButton> elements;
 
 		public int SelectedIndex
 		{
@@ -44,10 +51,13 @@ namespace KSStapleMenu
 			set
 			{
 				this.selectedIndex = value;
-				this.View.SetNeedsLayout();
+				NSNotificationCenter.DefaultCenter.PostNotificationName(SelectedIndexChangedNotif, this);
 			}
 		}
 		private int selectedIndex;
+
+
+		private List<UIButton> elements;
 
 		public int AddElement(UIImage image, string title = null)
 		{
@@ -58,6 +68,8 @@ namespace KSStapleMenu
 
 			// Return index of the element.
 			var index = this.elements.Count - 1;
+
+			NSNotificationCenter.DefaultCenter.PostNotificationName(SelectedIndexChangedNotif, this);
 
 			return index;
 		}

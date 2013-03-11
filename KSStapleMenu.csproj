@@ -96,6 +96,7 @@
     </Compile>
     <Compile Include="KSStapleMenuItem.cs" />
     <Compile Include="KSStapleMenu.cs" />
+    <Compile Include="KSMenuItemHostView.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="KSStapleMenuViewController_iPhone.xib" />

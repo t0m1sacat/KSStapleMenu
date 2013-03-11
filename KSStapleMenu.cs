@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using MonoTouch.Foundation;
 
 namespace KSStapleMenu
 {
@@ -84,10 +85,24 @@ namespace KSStapleMenu
 			}
 
 			this.items.CollectionChanged -= this.HandleItemsCollectionChanged;
-			foreach (var item in items)
+			for(int i = 0; i < items.Count; ++i)
 			{
-				this.items.Add (item);
-				this.AddSubview(item.View);
+				KSStapleMenuItem currentItem = items[i];
+				this.items.Add (currentItem);
+
+				var containerView = new KSMenuItemHostView();
+				containerView.ActiveElementView = currentItem.GetViewForIndex(currentItem.SelectedIndex);
+				containerView.SubElementsView = new UIView();
+				for(int elementIndex = 0; elementIndex < currentItem.NumberOfElements; elementIndex++)
+				{
+					if(elementIndex == currentItem.SelectedIndex)
+					{
+						continue;
+					}
+					containerView.SubElementsView.AddSubview(currentItem.GetViewForIndex(elementIndex));
+				}
+
+				this.AddSubview();
 			}
 			this.items.CollectionChanged += this.HandleItemsCollectionChanged;
 		}
@@ -98,9 +113,33 @@ namespace KSStapleMenu
 			this.SetNeedsLayout ();
 		}
 
+		private NSObject[] notifTokens;
+
+		private void HandleItemNotification(NSNotification notif)
+		{
+			switch(notif.Name)
+			{
+			case KSStapleMenuItem.ElementAddedNotif:
+				break;
+			case KSStapleMenuItem.SelectedIndexChangedNotif:
+				break;
+			}
+		}
+
+		public override void RemoveFromSuperview ()
+		{
+			NSNotificationCenter.DefaultCenter.RemoveObservers(this.notifTokens);
+			this.notifTokens = null;
+
+			base.RemoveFromSuperview ();
+		}
 
 		public override void WillMoveToSuperview (UIView newsuper)
 		{
+			this.notifTokens = new NSObject[2];
+			this.notifTokens[0] = NSNotificationCenter.DefaultCenter.AddObserver (KSStapleMenuItem.ElementAddedNotif, this.HandleItemNotification);
+			this.notifTokens[1] = NSNotificationCenter.DefaultCenter.AddObserver (KSStapleMenuItem.ElementAddedNotif, this.HandleItemNotification);
+
 			base.WillMoveToSuperview (newsuper);
 			float maxSize = this.MaxItemSize;
 			if(this.IsVertical)
