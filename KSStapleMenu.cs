@@ -278,7 +278,7 @@ namespace KSStapleMenu
 		/// <param name="itemsToAdd">Items to add.</param>
 		public void AddItems(params KSStapleMenuItem[] itemsToAdd)
 		{
-			Debug.Assert (items != null, "Provide valid items for initialization!");
+			Debug.Assert (itemsToAdd != null, "Provide valid items for initialization!");
 
 			if (this.items == null)
 			{
