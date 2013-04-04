@@ -29,27 +29,32 @@ namespace KSStapleMenu
 			txt.Center = new PointF (viewController.View.Center.X, viewController.View.Center.Y + 60);
 
 
-			// Create a new menu that will attach the right side of the parent view.
-			var stapleMenu = new KSStapleMenu (KSStapleMenu.STAPLEMENU_MODE.Right, 50f, new SizeF(60, 60));
-
-			// First item consists of three elements.
-			var item1 = new KSStapleMenuItem ("INK", UIImage.FromBundle ("item1"), "Ink", 12f, UIColor.Red);
-			item1.AddElement (UIImage.FromBundle ("item1_sub1"), "Ink Blue", 12f, UIColor.Red);
-			item1.AddElement (UIImage.FromBundle ("item1_sub2"), "Ink Red", 12f, UIColor.Red);
-
-			// Second item consists of three elements.
-			var item2 = new KSStapleMenuItem ("FREETEXT", UIImage.FromBundle ("item2"));
-			item2.AddElement (UIImage.FromBundle ("item1_sub1"));
-			item2.AddElement (UIImage.FromBundle ("item1_sub2"));
-
-			// Third item has only one element.
-			var item3 = new KSStapleMenuItem ("NOTE", UIImage.FromBundle ("item3"));
-
-			// Add the items to the menu.
-			stapleMenu.AddItems (item1, item2, item3);
-
-			// Preselect the 2nd subelement of the "INK" item.
-			stapleMenu.SelectItem ("INK", 1);
+			// Create a new annotation/sync/review selection toolbar.
+			var stapleMenu = new KSStapleMenu ( KSStapleMenu.STAPLEMENU_MODE.Right, 80f, new SizeF ( 80f, 80f ) );
+			KSStapleMenuItem inkItem = null;
+			KSStapleMenuItem noteItem = null;
+			KSStapleMenuItem freetextItem = null;
+			KSStapleMenuItem hilightItem = null;
+				
+			inkItem = new KSStapleMenuItem ( "INK", UIImage.FromBundle ( "Assets/Images/PDF/annot-ink-0" ), "Ink 0", 12f, UIColor.Black );
+			for ( int i = 1; i <= 3; i++ )
+			{
+				inkItem.AddElement ( UIImage.FromBundle ( "Assets/Images/PDF/annot-ink-" + i ), "Ink " + i, 12f, UIColor.Black );
+			}
+			noteItem = new KSStapleMenuItem ( "NOTE", UIImage.FromBundle ( "Assets/Images/PDF/annot-note" ), "Note", 12f, UIColor.Black );
+			freetextItem = new KSStapleMenuItem ( "FREETEXT", UIImage.FromBundle ( "Assets/Images/PDF/annot-freetext" ), "Freetext", 12f, UIColor.Black );
+			hilightItem = new KSStapleMenuItem ( "HIGHLIGHT", UIImage.FromBundle ( "Assets/Images/PDF/annot-highlight-0" ), "Highlight 0", 12f, UIColor.Black );
+			for ( int i = 1; i <= 3; i++ )
+			{
+				hilightItem.AddElement ( UIImage.FromBundle ( "Assets/Images/PDF/annot-highlight-" + i ), "Highlight " + i, 12f, UIColor.Black );
+			}
+			KSStapleMenuItem syncItem = null;
+			KSStapleMenuItem switchReviewsItem = null;
+			// Only show sync and review selection button if server side reviews are enabled and the user has permissions to annotate.
+			syncItem = new KSStapleMenuItem ( "SYNC", UIImage.FromBundle ( "Assets/Images/PDF/annot-sync" ), "Sync", 12f, UIColor.Black );
+			switchReviewsItem = new KSStapleMenuItem ( "REVIEWS", UIImage.FromBundle ( "Assets/Images/PDF/reviewselect" ), "Switch", 12f, UIColor.Black );
+			
+			stapleMenu.AddItems ( inkItem, noteItem, freetextItem, hilightItem, syncItem, switchReviewsItem );
 
 			// Add a callback to get informed if an element was tapped.
 			stapleMenu.ItemSelected += (string id, int index) =>

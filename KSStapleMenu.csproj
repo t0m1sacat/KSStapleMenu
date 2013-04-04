@@ -87,6 +87,8 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="readme.md" />
+    <None Include="Assets\Images\PDF\.DS_Store" />
+    <None Include="Assets\Images\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -110,5 +112,33 @@
     <BundleResource Include="Resources\item3.png" />
     <BundleResource Include="Resources\item1_sub1.png" />
     <BundleResource Include="Resources\item1_sub2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Images\PDF\actions_disclosure.png" />
+    <Content Include="Assets\Images\PDF\actions_disclosure%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-freetext.png" />
+    <Content Include="Assets\Images\PDF\annot-freetext%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-0.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-0%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-1.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-1%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-2.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-2%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-3.png" />
+    <Content Include="Assets\Images\PDF\annot-highlight-3%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-0.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-0%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-1.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-1%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-2.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-2%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-3.png" />
+    <Content Include="Assets\Images\PDF\annot-ink-3%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-note.png" />
+    <Content Include="Assets\Images\PDF\annot-note%402x.png" />
+    <Content Include="Assets\Images\PDF\annot-sync.png" />
+    <Content Include="Assets\Images\PDF\annot-sync%402x.png" />
+    <Content Include="Assets\Images\PDF\reviewselect.png" />
+    <Content Include="Assets\Images\PDF\reviewselect%402x.png" />
   </ItemGroup>
 </Project>

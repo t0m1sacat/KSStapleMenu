@@ -29,7 +29,6 @@ namespace KSStapleMenu
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			
 
 		}
 
@@ -45,8 +44,18 @@ namespace KSStapleMenu
 				AutoresizingMask = UIViewAutoresizing.All
 			};
 			lab.SizeToFit ();
-			this.View.AddSubview (lab);
+
 			lab.Center = this.View.Center;
+
+			this.View.BackgroundColor = UIColor.ScrollViewTexturedBackgroundColor;
+			var pageView = new UIView(new RectangleF(0, 0, 680, 900))
+			{
+				BackgroundColor = UIColor.White,
+				AutoresizingMask = UIViewAutoresizing.FlexibleDimensions,
+				Center = this.View.Center
+			};
+			this.View.AddSubview(pageView);
+			pageView.AddSubview (lab);
 		}
 		
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)

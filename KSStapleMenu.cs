@@ -6,9 +6,62 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using MonoTouch.Foundation;
+using MonoTouch.CoreAnimation;
+using MonoTouch.CoreGraphics;
 
 namespace KSStapleMenu
 {
+	public class KSStapleMenuBlurView : UIView
+	{
+		public KSStapleMenuBlurView(KSStapleMenu menu) : base()
+		{
+			this.menu = menu;
+			this.Alpha = 0.7f;
+			this.BackgroundColor = UIColor.LightGray;
+			this.Layer.CornerRadius = 15f;
+			this.gradientLayer = new CAGradientLayer();
+			if(menu.Mode == KSStapleMenu.STAPLEMENU_MODE.Left)
+			{
+				this.gradientLayer.Colors = new CGColor[] { UIColor.FromRGB(0.3f, 0.3f, 0.3f).CGColor, UIColor.FromRGB(0.8f, 0.8f, 0.8f).CGColor };
+			}
+			else
+			{
+				this.gradientLayer.Colors = new CGColor[] { UIColor.FromRGB(0.8f, 0.8f, 0.8f).CGColor, UIColor.FromRGB(0.3f, 0.3f, 0.3f).CGColor };
+			}
+
+			this.gradientLayer.StartPoint = new PointF(0f, 0.5f);
+			this.gradientLayer.EndPoint = new PointF(1f, 0.5f);
+			this.Layer.AddSublayer(this.gradientLayer);
+		}
+
+		private KSStapleMenu menu;
+		internal CAGradientLayer gradientLayer;
+
+		public override RectangleF Frame
+		{
+			get
+			{
+				return base.Frame;
+			}
+			set
+			{
+				base.Frame = value;
+				if(this.gradientLayer != null)
+				{
+					this.gradientLayer.Frame = new RectangleF(new PointF(0, 0), value.Size);
+					var roundedCorners = this.menu.Mode == KSStapleMenu.STAPLEMENU_MODE.Left ? UIRectCorner.TopRight | UIRectCorner.TopRight : UIRectCorner.TopLeft | UIRectCorner.BottomLeft ;
+					UIBezierPath maskPath = UIBezierPath.FromRoundedRect (this.Bounds, roundedCorners, new SizeF (15f, 15f));
+					CAShapeLayer maskLayer = new CAShapeLayer ();
+					maskLayer.Frame = this.Bounds;
+					maskLayer.Path = maskPath.CGPath;
+					
+					// Set the newly created shape layer as the mask for the image view's layer
+					this.Layer.Mask = maskLayer;
+				}
+			}
+		}
+	}
+
 	public class KSStapleMenu : UIView
 	{
 		public const float ANIMATION_EXPAND_SECONDS = 0.2f;
@@ -42,8 +95,14 @@ namespace KSStapleMenu
 				break;
 			}
 
-			//this.BackgroundColor = UIColor.Cyan;
+			this.BackgroundColor = UIColor.Clear;
+			this.blurLayer = new KSStapleMenuBlurView(this);
+			this.blurLayer.AutoresizingMask = this.Mode == STAPLEMENU_MODE.Right ? UIViewAutoresizing.FlexibleLeftMargin : UIViewAutoresizing.FlexibleRightMargin;
+			this.AddSubview(this.blurLayer);
 		}
+
+		internal KSStapleMenuBlurView blurLayer;
+
 
 		/// <summary>
 		/// Size of the item's elements.
@@ -74,6 +133,29 @@ namespace KSStapleMenu
 		}
 
 		/// <summary>
+		/// Gets the current selected item identifier.
+		/// </summary>
+		/// <value>The current selected item identifier.</value>
+		public string CurrentSelectedItemId
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Gets the index of the current selected element.
+		/// </summary>
+		/// <value>The index of the current selected element.</value>
+		public int CurrentSelectedElementIndex
+		{
+			get;
+			private set;
+		}
+
+
+
+
+		/// <summary>
 		/// Expands an item. This automatically collapses a previously opened item.
 		/// </summary>
 		/// <param name="id">Identifier of the item to expand.</param>
@@ -95,11 +177,17 @@ namespace KSStapleMenu
 			this.Collapse (animated);
 
 			KSMenuItemHostView hostView = null;
-			foreach(KSMenuItemHostView subview in this.Subviews)
+			foreach(var subview in this.Subviews)
 			{
-				if(string.Compare (id, subview.ItemId, StringComparison.OrdinalIgnoreCase) == 0)
+				var itemHostView = subview as KSMenuItemHostView;
+				if(itemHostView == null)
 				{
-					hostView = subview;
+					continue;
+				}
+
+				if(string.Compare (id, itemHostView.ItemId, StringComparison.OrdinalIgnoreCase) == 0)
+				{
+					hostView = itemHostView;
 					break;
 				}
 			}
@@ -113,21 +201,24 @@ namespace KSStapleMenu
 
 			if(animated)
 			{
-				UIView.Animate (ANIMATION_EXPAND_SECONDS, 0f, UIViewAnimationOptions.CurveEaseOut, delegate
+				UIView.Animate (ANIMATION_EXPAND_SECONDS, 0f, UIViewAnimationOptions.CurveEaseOut | UIViewAnimationOptions.LayoutSubviews, delegate
 				{
 					hostView.ExpandSubElements ();
+					float newWidth = hostView.Bounds.Width;
 				},
 				delegate
 				{
 					float newWidth = hostView.Bounds.Width;
 					if(this.Mode == STAPLEMENU_MODE.Right)
 					{
+
 						this.Frame = new RectangleF(this.Superview.Bounds.Width - newWidth, this.Frame.Y, newWidth, this.Bounds.Height);
 					}
 					else
 					{
-						this.Frame = new RectangleF(0, this.Frame.X, newWidth, this.Bounds.Height);
+						this.Frame = new RectangleF(0, this.Frame.Y, newWidth, this.Bounds.Height);
 					}
+
 				});
 			}
 			else
@@ -140,7 +231,7 @@ namespace KSStapleMenu
 				}
 				else
 				{
-					this.Frame = new RectangleF(0, this.Frame.X, newWidth, this.Bounds.Height);
+					this.Frame = new RectangleF(0, this.Frame.Y, newWidth, this.Bounds.Height);
 				}
 			}
 
@@ -177,11 +268,16 @@ namespace KSStapleMenu
 			}
 
 			KSMenuItemHostView hostView = null;
-			foreach(KSMenuItemHostView subview in this.Subviews)
+			foreach(var subview in this.Subviews)
 			{
-				if(string.Compare (this.ExpandedItemId, subview.ItemId, StringComparison.OrdinalIgnoreCase) == 0)
+				var itemHostView = subview as KSMenuItemHostView;
+				if(itemHostView == null)
 				{
-					hostView = subview;
+					continue;
+				}
+				if(string.Compare (this.ExpandedItemId, itemHostView.ItemId, StringComparison.OrdinalIgnoreCase) == 0)
+				{
+					hostView = itemHostView;
 					break;
 				}
 			}
@@ -195,7 +291,7 @@ namespace KSStapleMenu
 
 			if(animated)
 			{
-				UIView.Animate (ANIMATION_COLLAPSE_SECONDS, 0f, UIViewAnimationOptions.CurveEaseIn, delegate
+				UIView.Animate (ANIMATION_COLLAPSE_SECONDS, 0f, UIViewAnimationOptions.CurveEaseIn | UIViewAnimationOptions.LayoutSubviews, delegate
 				{
 					hostView.CollapseSubElements ();
 				},
@@ -208,7 +304,7 @@ namespace KSStapleMenu
 					}
 					else
 					{
-						this.Frame = new RectangleF(0, this.Frame.X, newWidth, this.Bounds.Height);
+						this.Frame = new RectangleF(0, this.Frame.Y, newWidth, this.Bounds.Height);
 					}
 				});
 			}
@@ -222,7 +318,7 @@ namespace KSStapleMenu
 				}
 				else
 				{
-					this.Frame = new RectangleF(0, this.Frame.X, newWidth, this.Bounds.Height);
+					this.Frame = new RectangleF(0, this.Frame.Y, newWidth, this.Bounds.Height);
 				}
 			}
 		}
@@ -245,6 +341,8 @@ namespace KSStapleMenu
 			{
 				this.selectedItemIndex.Add (id, index);
 			}
+			this.CurrentSelectedItemId = id;
+			this.CurrentSelectedElementIndex = index;
 
 			this.SetNeedsLayout ();
 		}
@@ -273,6 +371,21 @@ namespace KSStapleMenu
 		private Dictionary<string, int> selectedItemIndex = new Dictionary<string, int>();
 
 		/// <summary>
+		/// Returns the index of a specific item.
+		/// </summary>
+		/// <returns>The of item.</returns>
+		/// <param name="itemId">Item identifier.</param>
+		public int IndexOfItem(string itemId)
+		{
+			if (this.items == null)
+			{
+				return -1;
+			}
+
+			var item = this.items.FirstOrDefault(i => string.Compare(i.Id, itemId, StringComparison.OrdinalIgnoreCase) == 0);
+			return this.items.IndexOf(item);
+		}
+		/// <summary>
 		/// Adds items to the menu.
 		/// </summary>
 		/// <param name="itemsToAdd">Items to add.</param>
@@ -289,13 +402,17 @@ namespace KSStapleMenu
 			for(int i = 0; i < itemsToAdd.Length; ++i)
 			{
 				KSStapleMenuItem currentItem = itemsToAdd[i];
+				if (currentItem == null)
+				{
+					continue;
+				}
 				this.items.Add (currentItem);
 
 				currentItem.SizeElements(this.ItemSize);
 				currentItem.OnLongPress += this.HandleItemLongPress;
 				currentItem.OnSelect += this.HandleItemSelect;
 
-				var containerView = new KSMenuItemHostView(this, currentItem.Id);
+				var containerView = new KSMenuItemHostView(this, currentItem);
 
 				// Make container wide enough to hold all items.
 				containerView.Frame = new RectangleF(0, 0, this.ItemSize.Width * currentItem.NumberOfElements, this.ItemSize.Height);
@@ -352,6 +469,13 @@ namespace KSStapleMenu
 		public override void WillMoveToSuperview (UIView newsuper)
 		{
 			base.WillMoveToSuperview (newsuper);
+
+			// If RemoveFromSuperview() is called, it will trigger WillMoveToSuperview(null)...interesting concept, Mr. Apple.
+			if (newsuper == null)
+			{
+				return;
+			}
+
 			this.SizeToFit ();
 
 			switch(this.Mode)
@@ -374,6 +498,14 @@ namespace KSStapleMenu
 			}
 
 			this.Frame = new RectangleF (this.Frame.Location, new SizeF (this.ItemSize.Width, this.ItemSize.Height * this.ItemCount));
+			if(this.Mode == STAPLEMENU_MODE.Right)
+			{
+				this.blurLayer.Frame = new RectangleF(new PointF(0, 0), new SizeF(this.Frame.Size.Width + this.blurLayer.Layer.CornerRadius, this.Frame.Size.Height));
+			}
+			else
+			{
+				this.blurLayer.Frame = new RectangleF(new PointF(-this.blurLayer.Layer.CornerRadius, 0), new SizeF(this.Frame.Size.Width + this.blurLayer.Layer.CornerRadius, this.Frame.Size.Height));
+			}
 		}
 
 		/// <summary>
@@ -395,7 +527,19 @@ namespace KSStapleMenu
 			float y = 0;
 			foreach(var subview in this.Subviews)
 			{
-				subview.Center = new PointF(this.Bounds.Width - subview.Bounds.Width / 2f, y + subview.Bounds.Height / 2f);
+				if(subview is KSStapleMenuBlurView)
+				{
+					continue;
+				}
+				if(this.Mode == STAPLEMENU_MODE.Left)
+				{
+					subview.Center = new PointF(subview.Bounds.Width / 2f, y + subview.Bounds.Height / 2f);
+				}
+				else
+				{
+					subview.Center = new PointF(this.Bounds.Width - subview.Bounds.Width / 2f, y + subview.Bounds.Height / 2f);
+				}
+
 				y += subview.Bounds.Height;
 			}
 		}
