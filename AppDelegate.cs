@@ -41,20 +41,21 @@ namespace KSStapleMenu
 			{
 				inkItem.AddElement ( UIImage.FromBundle ( "Assets/Images/PDF/annot-ink-" + i ), "Ink " + i, 12f, UIColor.Black );
 			}
-			noteItem = new KSStapleMenuItem ( "NOTE", UIImage.FromBundle ( "Assets/Images/PDF/annot-note" ), "Note", 12f, UIColor.Black );
-			freetextItem = new KSStapleMenuItem ( "FREETEXT", UIImage.FromBundle ( "Assets/Images/PDF/annot-freetext" ), "Freetext", 12f, UIColor.Black );
 			hilightItem = new KSStapleMenuItem ( "HIGHLIGHT", UIImage.FromBundle ( "Assets/Images/PDF/annot-highlight-0" ), "Highlight 0", 12f, UIColor.Black );
 			for ( int i = 1; i <= 3; i++ )
 			{
 				hilightItem.AddElement ( UIImage.FromBundle ( "Assets/Images/PDF/annot-highlight-" + i ), "Highlight " + i, 12f, UIColor.Black );
 			}
+			noteItem = new KSStapleMenuItem ( "NOTE", UIImage.FromBundle ( "Assets/Images/PDF/annot-note" ), "Note", 12f, UIColor.Black );
+			freetextItem = new KSStapleMenuItem ( "FREETEXT", UIImage.FromBundle ( "Assets/Images/PDF/annot-freetext" ), "Freetext", 12f, UIColor.Black );
+
 			KSStapleMenuItem syncItem = null;
 			KSStapleMenuItem switchReviewsItem = null;
 			// Only show sync and review selection button if server side reviews are enabled and the user has permissions to annotate.
 			syncItem = new KSStapleMenuItem ( "SYNC", UIImage.FromBundle ( "Assets/Images/PDF/annot-sync" ), "Sync", 12f, UIColor.Black );
 			switchReviewsItem = new KSStapleMenuItem ( "REVIEWS", UIImage.FromBundle ( "Assets/Images/PDF/reviewselect" ), "Switch", 12f, UIColor.Black );
 			
-			stapleMenu.AddItems ( inkItem, noteItem, freetextItem, hilightItem, syncItem, switchReviewsItem );
+			stapleMenu.AddItems ( inkItem, hilightItem, noteItem, freetextItem, syncItem, switchReviewsItem );
 
 			// Add a callback to get informed if an element was tapped.
 			stapleMenu.ItemSelected += (string id, int index) =>

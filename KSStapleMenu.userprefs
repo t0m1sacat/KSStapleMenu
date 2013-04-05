@@ -1,13 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPad.6.1" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="KSMenuItemHostView.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="KSStapleMenu.cs">
     <Files>
-      <File FileName="AppDelegate.cs" Line="33" Column="74" />
-      <File FileName="KSStapleMenuItem.cs" Line="53" Column="34" />
-      <File FileName="KSStapleMenu.cs" Line="364" Column="21" />
-      <File FileName="KSMenuItemHostView.cs" Line="56" Column="5" />
+      <File FileName="KSStapleMenu.cs" Line="27" Column="5" />
+      <File FileName="KSMenuItemHostView.cs" Line="19" Column="24" />
       <File FileName="KSStapleMenuViewController.cs" Line="1" Column="1" />
-      <File FileName="readme.md" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,7 +12,7 @@
           <Option id="ShowAllFiles" value="True" />
           <Node name="KSStapleMenu" expanded="True">
             <Node name="Resources" expanded="True" />
-            <Node name="KSMenuItemHostView.cs" selected="True" />
+            <Node name="KSStapleMenu.cs" selected="True" />
           </Node>
         </State>
       </Pad>

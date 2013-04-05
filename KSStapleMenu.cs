@@ -16,19 +16,19 @@ namespace KSStapleMenu
 		public KSStapleMenuBlurView(KSStapleMenu menu) : base()
 		{
 			this.menu = menu;
-			this.Alpha = 0.7f;
 			this.BackgroundColor = UIColor.LightGray;
 			this.Layer.CornerRadius = 15f;
 			this.gradientLayer = new CAGradientLayer();
 			if(menu.Mode == KSStapleMenu.STAPLEMENU_MODE.Left)
 			{
-				this.gradientLayer.Colors = new CGColor[] { UIColor.FromRGB(0.3f, 0.3f, 0.3f).CGColor, UIColor.FromRGB(0.8f, 0.8f, 0.8f).CGColor };
+				this.gradientLayer.Colors = new CGColor[] { UIColor.FromRGB(0.4f, 0.4f, 0.4f).CGColor, UIColor.FromRGB(0.9f, 0.9f, 0.9f).CGColor };
 			}
 			else
 			{
-				this.gradientLayer.Colors = new CGColor[] { UIColor.FromRGB(0.8f, 0.8f, 0.8f).CGColor, UIColor.FromRGB(0.3f, 0.3f, 0.3f).CGColor };
+				this.gradientLayer.Colors = new CGColor[] { UIColor.FromRGB(0.9f, 0.9f, 0.9f).CGColor, UIColor.FromRGB(0.4f, 0.4f, 0.4f).CGColor };
 			}
 
+			this.gradientLayer.Opacity = 0.8f;
 			this.gradientLayer.StartPoint = new PointF(0f, 0.5f);
 			this.gradientLayer.EndPoint = new PointF(1f, 0.5f);
 			this.Layer.AddSublayer(this.gradientLayer);
@@ -52,6 +52,7 @@ namespace KSStapleMenu
 					var roundedCorners = this.menu.Mode == KSStapleMenu.STAPLEMENU_MODE.Left ? UIRectCorner.TopRight | UIRectCorner.TopRight : UIRectCorner.TopLeft | UIRectCorner.BottomLeft ;
 					UIBezierPath maskPath = UIBezierPath.FromRoundedRect (this.Bounds, roundedCorners, new SizeF (15f, 15f));
 					CAShapeLayer maskLayer = new CAShapeLayer ();
+					maskLayer.Opacity = 0.8f;
 					maskLayer.Frame = this.Bounds;
 					maskLayer.Path = maskPath.CGPath;
 					
